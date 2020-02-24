@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\LoginType;
 use App\Form\RegistrationType;
+use App\Service\Encoder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,17 +19,13 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register",name="security_register")
      */
-   public function registration(Request $request,EntityManagerInterface $entityManager,UserPasswordEncoderInterface $encoder){
+   public function registration(Request $request,Encoder $encoder){
        $user=new Users();
         $form=$this->createForm(RegistrationType::class,$user);
         $form->handleRequest($request);
         if($form->isSubmitted()&&$form->isValid()){
-            $hash=$encoder->encodePassword($user,$user->getPassword());
-            $user->setPassword($hash);
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('security_login');
+           $encoder->encoder($user);
+           return $this->redirectToRoute('security_login');
         }
         return $this->render('security/registration.html.twig',['formRegister'=>$form->createView()]);
    }
@@ -54,13 +51,4 @@ class SecurityController extends AbstractController
     */
    public function logout(){
    }
-    /**
-     * @Route("/account",name="security_account")
-     */
-    public function account(){
-        $user = $this->getUser();
-
-        return $this->render('security/account.html.twig');
-    }
-
 }
