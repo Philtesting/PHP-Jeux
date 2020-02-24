@@ -21,6 +21,8 @@
     background-color: hsl(var(--hue), 100%, 20%);
   }
   
+  
+
   body.correct {
     --hue: var(--hue-correct);
   }
@@ -83,4 +85,10 @@
   
   .hide {
     display: none;
+  }
+
+  .timer{
+    background-color : hsl(120, 100%, 50%);
+    float: right;
+    text-align: right;
   }
