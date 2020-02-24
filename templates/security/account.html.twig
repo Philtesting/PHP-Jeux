@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello!{% endblock %}
+
+{% block body %}
+<h1>Résumé compte</h1>
+
+<p>Bonjour {{ app.user.username }}</p>
+    <ul>
+        <li>
+            <p>Modifier le pseudo<span class="sr-only">(current)</span></p>
+            <input type="text"  placeholder="Nouveau pseudo">
+            <button type="submit" class="btn btn-success">
+                Modifier pseudo
+            </button>
+        </li>
+        <li>
+            <p>Modifier le mot de passe<span class="sr-only">(current)</span></p>
+            <input type="password" name="password" id="inputPassword" placeholder="Nouveau mot de passe">
+            <button type="submit" class="btn btn-success">
+                Modifier mot de passe
+            </button>
+        </li>
+    </ul>
+{% endblock %}
