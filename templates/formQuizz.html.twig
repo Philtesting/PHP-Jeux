@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1> On demande une question ! </h1>
+    {{ form_start(formAddQuestion) }}
+    {{form_widget(formAddQuestion)}}
+    
+    
+    <button type="submit" class="btn btn-success">Ajouter</button>
+    {{ form_end(formAddQuestion) }}
+    
+{% endblock %}
