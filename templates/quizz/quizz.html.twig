@@ -21,5 +21,9 @@
       <button id="next-btn" class="next-btn btn hide">Next</button>
     </div>
   </div>
-{% block javascripts %}{% endblock %}
+        {% block javascripts %}
+        
+            {{ encore_entry_script_tags('app') }}
+
+        {% endblock %}
 {% endblock %}
