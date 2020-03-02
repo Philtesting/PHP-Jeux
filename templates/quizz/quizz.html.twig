@@ -2,28 +2,30 @@
 {% block title %}Quizz{% endblock %}
     {% block stylesheets %}
         <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+        {{ encore_entry_link_tags('app') }}
     {% endblock %}
 {% block body %}
-
-<div class="container">
-    <div id="question-container" class="hide">
-      <div >
-      <div style="display:inline" id="question">Question </div>
-      <div id="sec" class="timer" >10</div>
+<div class="undernav">
+  <div class="container">
+      <div id="question-container" class="hide">
+        <div >
+          <div style="display:inline" id="question">Question </div>
+          <div id="sec" class="timer" >10</div>
         </div>
-      
-      <div id="answer-buttons" class="btn-grid">
-        <button class="btn">Answer 1</button>
-        <button class="btn">Answer 2</button>
-        <button class="btn">Answer 3</button>
-        <button class="btn">Answer 4</button>
+        
+        <div id="answer-buttons" class="btn-grid">
+          <button class="btn-quizz">Answer 1</button>
+          <button class="btn-quizz">Answer 2</button>
+          <button class="btn-quizz">Answer 3</button>
+          <button class="btn-quizz">Answer 4</button>
+        </div>
       </div>
-    </div>
-    <div class="controls">
-      <button id="start-btn" class="start-btn btn">Start</button>
-      <button id="next-btn" class="next-btn btn hide">Next</button>
-    </div>
+      <div class="controls">
+        <button id="start-btn" class="start-btn btn-quizz">Start</button>
+        <button id="next-btn" class="next-btn btn-quizz hide">Next</button>
+      </div>
   </div>
+</div>
         {% block javascripts %}
         
             {{ encore_entry_script_tags('app') }}

@@ -9,7 +9,7 @@
   --hue-correct: 145;
 }
 
-body {
+.undernav {
   --hue: var(--hue-neutral);
   padding: 0;
   margin: 0;
@@ -47,7 +47,7 @@ body.wrong {
   margin: 20px 0;
 }
 
-.btn {
+.btn-quizz{
   --hue: var(--hue-neutral);
   border: 1px solid hsl(var(--hue), 100%, 30%);
   background-color: hsl(var(--hue), 100%, 50%);
@@ -58,16 +58,16 @@ body.wrong {
   font-size: 1.5rem;
 }
 
-.btn:hover {
+.btn-quizz:hover {
   border-color: black;
 }
 
-.btn.correct {
+.btn-quizz.correct {
   --hue: var(--hue-correct);
   color: black;
 }
 
-.btn.wrong {
+.btn-quizz.wrong {
   --hue: var(--hue-wrong);
 }
 
