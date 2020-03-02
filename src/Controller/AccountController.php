@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class AccountController extends AbstractController
 {
     /**
-     * @Route("/account",name="security_account")
+     * @Route("/account", name="security_account")
      */
     public function account()
     {
