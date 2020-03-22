@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
-{% block title %}Quizz{% endblock %}
-    {% block stylesheets %}
-        <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
-        {{ encore_entry_link_tags('app') }}
-    {% endblock %}
+{% block title %}
+  Quizz
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+{% block header %}{% endblock %}
 {% block body %}
 <div class="undernav">
   <div class="container">
