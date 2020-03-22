@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Quizz;
 use App\Repository\QuizzRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/game",name="game.")
@@ -12,11 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuizzController extends AbstractController
 {
     /**
-     * @Route("/quizz",name="quizz")
+     * @Route("/quizz/{difficulter}",name="quizz")
      */
-    public function game(QuizzRepository $quizzDb)
+    public function sendQuestionsToGame($difficulter ,QuizzRepository $quizzDb)
     {
-        $quizz = $quizzDb->findAll();
+        $quizz = $quizzDb->findBy(['niveau' => $difficulter]);
+
         $arrayCollection = array();
 
         foreach($quizz as $item) {
@@ -34,5 +37,14 @@ class QuizzController extends AbstractController
         return $this->render('quizz/quizz.html.twig',[
             'quizz' => $arrayCollection
         ]);
+    }
+    /**
+     * @Route("/highscore",name="highscore")
+     */
+    public function sendHighScore(Request $request){
+        $getCookies = Request::createFromGlobals();
+        $score = $getCookies->cookies->get('highscore');
+        dump($request);
+        return $this->render('base.html.twig');
     }
 }

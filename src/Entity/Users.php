@@ -44,6 +44,11 @@ class Users implements UserInterface
      */
     private $username;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Score", inversedBy="user")
+     */
+    private $score;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,5 +103,17 @@ class Users implements UserInterface
     public function getSalt()
     {
         // TODO: Implement getSalt() method.
+    }
+
+    public function getScore(): ?Score
+    {
+        return $this->score;
+    }
+
+    public function setScore(?Score $score): self
+    {
+        $this->score = $score;
+
+        return $this;
     }
 }

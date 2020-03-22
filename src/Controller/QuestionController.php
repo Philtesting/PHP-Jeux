@@ -31,12 +31,10 @@ class QuestionController extends AbstractController
             $this->manager->flush();
             
 
-         }
-         return $this->render('formQuizz.html.twig' ,[
+        }
+        return $this->render('formQuizz.html.twig' ,[
              'form' => $form->createView()
              ]);
-//
-    
 
     }
 
