@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block body %}
+    <h1>Modifier mon pseudo</h1>
+
+    <p>Bonjour {{ app.user ? app.user.username }} </p>
+    {{ form_start(formUsername) }}
+    {{ form_row(formUsername.username,{'label':'Nom d\'utilisateur','attr':{'placeholder':"Entrer votre pseudo"}}) }}
+    <button type="submit" class="btn btn-success">Confirmer</button>
+    {{ form_end(formUsername) }}
+
+{% endblock %}
