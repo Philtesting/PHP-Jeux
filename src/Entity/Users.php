@@ -45,9 +45,21 @@ class Users implements UserInterface
     private $username;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Score", inversedBy="user")
+     * @ORM\Column(type="integer")
      */
-    private $score;
+    private $scoreFacil;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $scoreMoyen;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $scoreDifficil;
+
+
 
     public function getId(): ?int
     {
@@ -105,14 +117,38 @@ class Users implements UserInterface
         // TODO: Implement getSalt() method.
     }
 
-    public function getScore(): ?Score
+    public function getScoreFacil(): ?int
     {
-        return $this->score;
+        return $this->scoreFacil;
     }
 
-    public function setScore(?Score $score): self
+    public function setScoreFacil(int $scoreFacil): self
     {
-        $this->score = $score;
+        $this->scoreFacil = $scoreFacil;
+
+        return $this;
+    }
+
+    public function getScoreMoyen(): ?int
+    {
+        return $this->scoreMoyen;
+    }
+
+    public function setScoreMoyen(int $scoreMoyen): self
+    {
+        $this->scoreMoyen = $scoreMoyen;
+
+        return $this;
+    }
+
+    public function getScoreDifficil(): ?int
+    {
+        return $this->scoreDifficil;
+    }
+
+    public function setScoreDifficil(int $scoreDifficil): self
+    {
+        $this->scoreDifficil = $scoreDifficil;
 
         return $this;
     }
