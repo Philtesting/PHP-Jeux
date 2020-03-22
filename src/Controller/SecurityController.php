@@ -24,6 +24,7 @@ class SecurityController extends AbstractController
         $user=new Users();
         $form=$this->createForm(RegistrationType::class,$user);
         $form->handleRequest($request);
+        $user->setLevel(0);
         if($form->isSubmitted()&&$form->isValid()){
            $encoder->encoder($user);
            return $this->redirectToRoute('security_login');

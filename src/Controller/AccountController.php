@@ -61,7 +61,9 @@ class AccountController extends AbstractController
         $user=$this->getUser();
         $form=$this->createForm(ChangePasswordType::class,$user);
         $form->handleRequest($request);
+        $newPass= $user->getPassword();
         if($form->isSubmitted()&&$form->isValid()){
+                $user->setPassword($newPass);
                 $encoder->encoder($user);
                 return $this->redirectToRoute('security_account');
         }
