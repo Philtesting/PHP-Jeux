@@ -8,19 +8,25 @@
 {% endblock %}
 {% block header %}{% endblock %}
 {% block body %}
+
 <div class="undernav">
   <div class="container">
-      <div id="question-container" class="hide">
+      <div id="question-container" class="hide" >
         <div >
-          <div style="display:inline" id="question">Question </div>
+          <div style="display:inline" id="question">{{quizz[0].question}} </div>
           <div id="sec" class="timer" >10</div>
         </div>
         
         <div id="answer-buttons" class="btn-grid">
-          <button class="btn-quizz">Answer 1</button>
-          <button class="btn-quizz">Answer 2</button>
-          <button class="btn-quizz">Answer 3</button>
-          <button class="btn-quizz">Answer 4</button>
+
+          <button class="btn-quizz">{{quizz[0].reponse1}}</button>
+        {% if  quizz[0].reponse2 is not null %}
+          <button class="btn-quizz">{{quizz[0].reponse2}}</button>
+        {% endif %}
+        {% if  quizz[0].reponse3 is not null %}
+          <button class="btn-quizz">{{quizz[0].reponse3}}</button>
+        {% endif %}
+          <button class="btn-quizz">{{quizz[0].bonneReponse}}</button>
         </div>
       </div>
       <div class="controls">
@@ -29,9 +35,133 @@
       </div>
   </div>
 </div>
-        {% block javascripts %}
-        
-            {{ encore_entry_script_tags('app') }}
+{% endblock %}
 
-        {% endblock %}
+{% block javascripts %}
+
+<script>
+  const startButton = document.getElementById('start-btn')
+  const nextButton = document.getElementById('next-btn')
+  const questionContainerElement = document.getElementById('question-container')
+  const questionElement = document.getElementById('question')
+  const sec = document.getElementById('sec')
+  const answerButtonsElement = document.getElementById('answer-buttons')
+
+  var countdown;
+  var firstQ = true;
+
+  let shuffledQuestions, currentQuestionIndex
+
+  startButton.addEventListener('click', startGame)
+  nextButton.addEventListener('click', () => {
+    currentQuestionIndex++
+    setNextQuestion()
+  })
+
+  function startGame() {
+    startButton.classList.add('hide')
+    shuffledQuestions = questions.sort(() => Math.random() - .5)
+    currentQuestionIndex = 0
+    questionContainerElement.classList.remove('hide')
+    setNextQuestion()
+  }
+
+  function setNextQuestion() {
+    resetState()
+    showQuestion(shuffledQuestions[currentQuestionIndex])
+    if(!firstQ){
+      stopTimer()
+    }
+    restartTimer()
+  }
+
+  function restartTimer(){
+    var seconds = 10
+    if(firstQ){
+      seconds = 9
+    }
+    countdown = setInterval(function() {
+      document.getElementById("sec").textContent = seconds;
+      seconds--;
+      if (seconds < 0){
+        
+        clearInterval(countdown);
+      }
+    }, 1000);
+    firstQ = false
+  }
+
+  function stopTimer(){
+    clearInterval(countdown);
+  }
+
+  function showQuestion(question) {
+
+    questionElement.innerText = question.question
+    answersA = {text: question.bonneReponse, correct: true };
+    answersB = {text: question.reponse1, correct: false };
+    answersC = {text: question.reponse2, correct: false };
+    answersD = {text: question.reponse3, correct: false };
+
+    answers =[answersA,answersB,answersC,answersD]
+    
+    answers.forEach(answer => {
+    if(answer.text != null){
+      const button = document.createElement('button')
+      button.innerText = answer.text
+      if (answer.correct) {
+        button.dataset.correct = answer.correct
+      }
+      button.classList.add('btn-quizz')
+      button.addEventListener('click', selectAnswer)
+      answerButtonsElement.appendChild(button)
+    }
+  })
+
+
+
+
+  }
+
+  function resetState() {
+    clearStatusClass(document.body)
+    nextButton.classList.add('hide')
+    while (answerButtonsElement.firstChild) {
+      answerButtonsElement.removeChild(answerButtonsElement.firstChild)
+    }
+  }
+
+  function selectAnswer(e) {
+    const selectedButton = e.target
+    const correct = selectedButton.dataset.correct
+    setStatusClass(document.body, correct)
+    Array.from(answerButtonsElement.children).forEach(button => {
+      setStatusClass(button, button.dataset.correct)
+    })
+    if (shuffledQuestions.length > currentQuestionIndex + 1) {
+      nextButton.classList.remove('hide')
+    } else {
+      startButton.innerText = 'Restart'
+      startButton.classList.remove('hide')
+    }
+  }
+
+  function setStatusClass(element, correct) {
+    clearStatusClass(element)
+    if (correct) {
+      element.classList.add('correct')
+    } else {
+      element.classList.add('wrong')
+    }
+  }
+
+  function clearStatusClass(element) {
+    element.classList.remove('correct')
+    element.classList.remove('wrong')
+  }
+
+  
+  const questions = {{ quizz|json_encode|raw }}
+</script>
+  
 {% endblock %}
