@@ -32,7 +32,9 @@ class QuestionController extends AbstractController
             
 
          }
-         return $this->render('formQuizz.html.twig' ,['formAddQuestion'=>$form->createView()]);
+         return $this->render('formQuizz.html.twig' ,[
+             'formAddQuestion' => $form->createView()
+             ]);
 //
     
 
