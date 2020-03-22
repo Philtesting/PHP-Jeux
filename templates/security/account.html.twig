@@ -5,7 +5,39 @@
 {% block body %}
 <h1>Résumé compte</h1>
 
-<p>Bonjour {{ app.user.username }}</p>
+<p>Bonjour {{ user.username }}</p>
+<p>Score Personnel</p>
+<table class="table table-stripped">
+    <thead>
+        <tr>
+            <td>Jeux</td>
+            <td>Difficulté</td>
+            <td>Score</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Quizz</td>
+            <td>Facile</td>
+            <td>{{user.scoreFacil}}</td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td>Quizz</td>
+            <td>Moyen</td>
+            <td>{{user.scoreMoyen}}</td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td>Quizz</td>
+            <td>Difficile</td>
+            <td>{{user.scoreDifficil}}</td>
+        </tr>
+    </tbody>
+</table>
+<hr>
     <ul>
         <li>
             <p>Modifier le pseudo<span class="sr-only">(current)</span></p>

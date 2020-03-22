@@ -36,8 +36,6 @@ class QuizzController extends AbstractController
                  'reponse3' => $item->getReponse3(),
              );
         }
-                
-        dump($arrayCollection);
         return $this->render('quizz/quizz.html.twig',[
             'quizz' => $arrayCollection,
             'difficulter' => $difficulter
@@ -78,6 +76,6 @@ class QuizzController extends AbstractController
             }
         }
         $entityManager->flush();
-        return $this->render('base.html.twig');
+        return $this->redirect($this->generateUrl('security_account'));
     }
 }
