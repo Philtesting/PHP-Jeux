@@ -33,9 +33,9 @@
         {% else %}
             <a class="nav-link"> <em>Bienvenue  </em> <strong>{{ app.user.username }}</strong></a>
             <ul class="nav nav-pills flex-column">
-                <li class="nav-item dropdown show">
+                <li class="nav-item dropdown ">
                     <a class="nav-link btn btn-secondary my-2 my-sm-0" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" aria-expanded="false">Mon compte</a>
-                    <div class="dropdown-menu show" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; right: 18px; will-change: transform;" x-placement="bottom-start">
+                    <div class="dropdown-menu " style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; right: 18px; will-change: transform;" x-placement="bottom-start">
                         <a class="dropdown-item" href="{{ path('security_account') }}">Info compte</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#"> Niveau {{app.user.level}}
