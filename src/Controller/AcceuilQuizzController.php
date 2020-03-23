@@ -37,6 +37,8 @@ class AcceuilQuizzController extends AbstractController
         $game->setPlayerOne($user);
         $game->setNameGame(uniqid());
         $game->setLevel($level);
+
+        dump($game);
         
         $em = $this->getDoctrine()->getManager();
         $em->persist($game);

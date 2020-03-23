@@ -25,7 +25,7 @@
                     <td>{{player}}</td>
                 </tr>
             </tbody>
-            {%if player2 is not null %}
+            {% if player2 is not null %}
             <tbody>
                 <tr>
                     <td>{{player2}}</td>
@@ -34,8 +34,9 @@
             </tbody>
             {% endif %}
             </table>
-
-    
+    {% if player2 is not null %}
+            <a href={{ path( 'game.quizz' , {difficulter: 0}) }}  type = "submit" class="next-btn btn-quizz">Play</a>
+    {% endif %}
       </div>
 
   </div>
