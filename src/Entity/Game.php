@@ -66,30 +66,6 @@ class Game
         return $this;
     }
 
-    public function getPlayerOne(): ?Users
-    {
-        return $this->playerOne;
-    }
-
-    public function setPlayerOne(?Users $playerOne): self
-    {
-        $this->playerOne = $playerOne;
-
-        return $this;
-    }
-
-    public function getPlayerTwo(): ?users
-    {
-        return $this->playerTwo;
-    }
-
-    public function setPlayerTwo(?users $playerTwo): self
-    {
-        $this->playerTwo = $playerTwo;
-
-        return $this;
-    }
-
     public function getNameGame(): ?string
     {
         return $this->nameGame;
@@ -134,6 +110,30 @@ class Game
     public function setLevel(int $level): self
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    public function getPlayerOne(): ?Users
+    {
+        return $this->playerOne;
+    }
+
+    public function setPlayerOne(?Users $playerOne): self
+    {
+        $this->playerOne = $playerOne;
+
+        return $this;
+    }
+
+    public function getPlayerTwo(): ?users
+    {
+        return $this->playerTwo;
+    }
+
+    public function setPlayerTwo(?users $playerTwo): self
+    {
+        $this->playerTwo = $playerTwo;
 
         return $this;
     }

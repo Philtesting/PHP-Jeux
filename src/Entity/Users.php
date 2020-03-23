@@ -47,7 +47,6 @@ class Users implements UserInterface
     private $username;
 
     /**
-<<<<<<< HEAD
      * @ORM\Column(type="integer")
      */
     private $scoreFacil;
@@ -62,8 +61,7 @@ class Users implements UserInterface
      */
     private $scoreDifficil;
 
-
-=======
+    /** 
      * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="playerTwo")
      */
     private $games;
@@ -72,7 +70,6 @@ class Users implements UserInterface
     {
         $this->games = new ArrayCollection();
     }
->>>>>>> mixcopy
 
     public function getId(): ?int
     {
@@ -129,37 +126,17 @@ class Users implements UserInterface
     {
         // TODO: Implement getSalt() method.
     }
-
-<<<<<<< HEAD
+    
     public function getScoreFacil(): ?int
     {
         return $this->scoreFacil;
     }
 
-    public function setScoreFacil(int $scoreFacil): self
+    public function setScoreFacil(int $scoreFacil)
     {
         $this->scoreFacil = $scoreFacil;
-=======
-    /**
-     * @return Collection|Game[]
-     */
-    public function getGames(): Collection
-    {
-        return $this->games;
     }
 
-    public function addGame(Game $game): self
-    {
-        if (!$this->games->contains($game)) {
-            $this->games[] = $game;
-            $game->setPlayerTwo($this);
-        }
->>>>>>> mixcopy
-
-        return $this;
-    }
-
-<<<<<<< HEAD
     public function getScoreMoyen(): ?int
     {
         return $this->scoreMoyen;
@@ -177,10 +154,29 @@ class Users implements UserInterface
         return $this->scoreDifficil;
     }
 
-    public function setScoreDifficil(int $scoreDifficil): self
+    public function setScoreDifficil(int $scoreDifficil)
     {
         $this->scoreDifficil = $scoreDifficil;
-=======
+    }
+
+    /**
+     * @return Collection|Game[]
+     */
+    public function getGames(): Collection
+    {
+        return $this->games;
+    }
+
+    public function addGame(Game $game): self
+    {
+        if (!$this->games->contains($game)) {
+            $this->games[] = $game;
+            $game->setPlayerTwo($this);
+        }
+
+        return $this;
+    }
+
     public function removeGame(Game $game): self
     {
         if ($this->games->contains($game)) {
@@ -190,7 +186,6 @@ class Users implements UserInterface
                 $game->setPlayerTwo(null);
             }
         }
->>>>>>> mixcopy
 
         return $this;
     }
