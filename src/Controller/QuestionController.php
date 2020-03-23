@@ -16,7 +16,7 @@ use App\Entity\Quizz;
 class QuestionController extends AbstractController
 {
     /**
-     * @Route("/AddQuest",name="add_question")
+     * @Route("/createQ",name="add_question")
      */
     public function addQuestion(Request $request,EntityManagerInterface $manager)
     {
@@ -37,7 +37,4 @@ class QuestionController extends AbstractController
              ]);
 
     }
-
-
-
 }

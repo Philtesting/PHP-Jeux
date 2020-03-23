@@ -104,12 +104,15 @@
     if(typeof correct == 'undefined' || !correct){
         seconds = 0;
     }
+
     var score = document.createElement('div');
-    score.innerText = "Votre score est de " + Math.round(seconds * 100);
+    score.innerText = "Vous avez gagné " + Math.round(seconds * 100) + " points";
     answerButtonsElement.appendChild(score);
-    scoreCurr += Math.round(seconds * 100);
+
     var scoreTotal = document.createElement('div');
+    scoreCurr += Math.round(seconds * 100);
     scoreTotal.innerText = "Total: " + scoreCurr;
+
     setCookie("highscore", scoreCurr)
     setCookie("difficulter", {{difficulter}})
     answerButtonsElement.appendChild(scoreTotal);

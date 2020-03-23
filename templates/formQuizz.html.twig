@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
-
+{% form_theme form 'form_table_layout.html.twig' %}
 {% block body %}
-    <h1> On demande une question ! </h1>
+<div class="container">
+    <h1> Ajouter Question</h1>
+    <hr>
 {{ form(form) }}
-    
+</div>
 {% endblock %}
