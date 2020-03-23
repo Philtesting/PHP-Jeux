@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block title %}acceuil{% endblock %}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+{% block body %}
+<div class="undernav">
+  <div class="container">
+
+      <div class="m-3" class="controls" >
+        <h1> Bienvenue {{login}}</h1> <br>
+
+        <h2>Participants</h2>
+        <hr>
+        <table class="table table-stripped">
+            <thead>
+                <tr>
+                    <td>Joueurs :</td>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{player}}</td>
+                </tr>
+            </tbody>
+            {%if player2 is not null %}
+            <tbody>
+                <tr>
+                    <td>{{player2}}</td>
+
+                </tr>
+            </tbody>
+            {% endif %}
+            </table>
+
+    
+      </div>
+
+  </div>
+</div>
+        {% block javascripts %}
+        
+            {{ encore_entry_script_tags('app') }}
+
+        {% endblock %}
+{% endblock %}

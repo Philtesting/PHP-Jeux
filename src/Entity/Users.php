@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,6 +47,7 @@ class Users implements UserInterface
     private $username;
 
     /**
+<<<<<<< HEAD
      * @ORM\Column(type="integer")
      */
     private $scoreFacil;
@@ -60,6 +63,16 @@ class Users implements UserInterface
     private $scoreDifficil;
 
 
+=======
+     * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="playerTwo")
+     */
+    private $games;
+
+    public function __construct()
+    {
+        $this->games = new ArrayCollection();
+    }
+>>>>>>> mixcopy
 
     public function getId(): ?int
     {
@@ -117,6 +130,7 @@ class Users implements UserInterface
         // TODO: Implement getSalt() method.
     }
 
+<<<<<<< HEAD
     public function getScoreFacil(): ?int
     {
         return $this->scoreFacil;
@@ -125,10 +139,27 @@ class Users implements UserInterface
     public function setScoreFacil(int $scoreFacil): self
     {
         $this->scoreFacil = $scoreFacil;
+=======
+    /**
+     * @return Collection|Game[]
+     */
+    public function getGames(): Collection
+    {
+        return $this->games;
+    }
+
+    public function addGame(Game $game): self
+    {
+        if (!$this->games->contains($game)) {
+            $this->games[] = $game;
+            $game->setPlayerTwo($this);
+        }
+>>>>>>> mixcopy
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getScoreMoyen(): ?int
     {
         return $this->scoreMoyen;
@@ -149,6 +180,17 @@ class Users implements UserInterface
     public function setScoreDifficil(int $scoreDifficil): self
     {
         $this->scoreDifficil = $scoreDifficil;
+=======
+    public function removeGame(Game $game): self
+    {
+        if ($this->games->contains($game)) {
+            $this->games->removeElement($game);
+            // set the owning side to null (unless already changed)
+            if ($game->getPlayerTwo() === $this) {
+                $game->setPlayerTwo(null);
+            }
+        }
+>>>>>>> mixcopy
 
         return $this;
     }
