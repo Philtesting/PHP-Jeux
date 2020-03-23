@@ -29,12 +29,10 @@ class QuestionController extends AbstractController
             $this->manager=$manager;
             $this->manager->persist($quizz);
             $this->manager->flush();
-            
 
         }
         return $this->render('formQuizz.html.twig' ,[
              'form' => $form->createView()
              ]);
-
     }
 }
