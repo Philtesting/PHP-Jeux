@@ -10,6 +10,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\GameRepository;
 
+    /**
+     * @Route("/game",name="")
+     */
 class AcceuilQuizzController extends AbstractController
 {
     /**

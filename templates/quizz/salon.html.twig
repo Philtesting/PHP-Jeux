@@ -34,7 +34,7 @@
             </tbody>
             {% endif %}
             </table>
-    {% if player2 is not null %}
+    {% if player2 != "Il manque un joueur" %}
             <a href={{ path( 'game.quizz' , {difficulter: 0}) }}  type = "submit" class="next-btn btn-quizz">Play</a>
     {% endif %}
       </div>
