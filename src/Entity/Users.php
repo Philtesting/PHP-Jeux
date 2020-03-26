@@ -12,8 +12,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
  * @UniqueEntity(
- *     fields={"email"},
- *      message="L'email que vous avez indiqué est deja utilisé "
+ *     fields={"email","username"},
+ *      message="Déja utilisé"
  * )
  */
 class Users implements UserInterface
@@ -60,16 +60,21 @@ class Users implements UserInterface
      * @ORM\Column(type="integer")
      */
     private $scoreDifficil;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $level;
 
     /** 
      * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="playerTwo")
      */
     private $games;
-
+    
     public function __construct()
     {
         $this->games = new ArrayCollection();
     }
+    
 
     public function getId(): ?int
     {
@@ -188,5 +193,15 @@ class Users implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    public function setLevel($level): void
+    {
+        $this->level = $level;
     }
 }

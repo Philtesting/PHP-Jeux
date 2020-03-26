@@ -16,18 +16,20 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {   private $entityManager;
+
     /**
      * @Route("/register",name="security_register")
      */
    public function registration(Request $request,Encoder $encoder){
-       $user=new Users();
+        $user=new Users();
         $form=$this->createForm(RegistrationType::class,$user);
         $form->handleRequest($request);
         
         $user -> setScoreFacil(0);
         $user -> setScoreMoyen(0);
         $user -> setScoreDifficil(0);
-
+        $user->setLevel(0);
+        
         if($form->isSubmitted()&&$form->isValid()){
            $encoder->encoder($user);
            return $this->redirectToRoute('security_login');

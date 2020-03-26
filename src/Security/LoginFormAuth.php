@@ -65,12 +65,15 @@ throw new InvalidCsrfTokenException();
 }
 
 $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $credentials['email']]);
+$user2 = $this->entityManager->getRepository(Users::class)->findOneBy(['username' => $credentials['email']]);
 
-if (!$user) {
+if (!$user && !$user2 ) {
 // fail authentication with a custom error
-throw new CustomUserMessageAuthenticationException('Email could not be found.');
+throw new CustomUserMessageAuthenticationException('Votre mail ou pseudo est incorrect');
 }
-
+if($user2!=null){
+    $user=$user2;
+}
 return $user;
 }
 
