@@ -5,6 +5,9 @@
     <title>{% block title %}MEDI-GAMES{% endblock %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+       <link rel="stylesheet" href="public\build\app.css">
+       {{ encore_entry_link_tags('app') }}
+        
     {% endblock %}
 </head>
 <body>
@@ -20,10 +23,13 @@
                 <a class="nav-link" href="#">Acceuil<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">JEUX</a>
+                <a class="nav-link" href="{{ path('questions') }}">JEUX</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">CLASSEMENT</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('diagnostic') }}">DIAGNOSTIC</a>
             </li>
             {% if app.user %}
             <li class="nav-item">
@@ -33,13 +39,14 @@
         </ul>
         {% if not app.user %}
         <form class="form-inline my-2 my-lg-0" action="{{ path('security_login') }}">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Connexion</button>
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">connexion</button>
         </form>
         {% else %}
         <form class="form-inline my-2 my-lg-0" action="{{ path('security_logout') }}">
             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Déconnexion</button>
         </form>
         {% endif %}
+        
     </div>
 </nav>
 {% block body %}{% endblock %}

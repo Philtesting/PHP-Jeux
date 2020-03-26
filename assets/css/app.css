@@ -1,3 +1,53 @@
 body {
     background-color: lightgray;
+    margin: 0;
+    padding: 0;
+}
+.btn-quiz{
+    height:34px;
+    margin-right:10px;
+    float: left;
+}
+.nav{
+    margin-top:167px;
+    width:1024px;
+    height:34px;
+}
+.container{
+    text-align: center;
+    margin-top: 360px;
+    
+}
+
+a{
+    display: inline-block;
+    text-decoration: teal;
+    background-color: red;
+    color:rebeccapurple;
+    padding: 10px 45 px;
+    font-size: 17px;
+    transition: 0.3s;
+}
+a:hover{
+    background-color: black;
+    animation: shake 0.3s normal forwards ease-in-out;
+}
+.btn {
+    border: 1px solid #3498db;
+    background: none;
+    padding: 10px;
+    font-size: 20px;
+    font-family: "monserrat";
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.8s;
+
+}
+#menu ul {
+    list-style: outside;
+}
+
+#menu ul li{
+    background-color: red;
+    border: 1px solid white;
 }
