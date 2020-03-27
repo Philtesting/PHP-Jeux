@@ -13,14 +13,13 @@ use App\Entity\Quizz;
 
 
 
-class QuestionController extends AbstractController
+class AdminController extends AbstractController
 {
     /**
      * @Route("/createQ",name="add_question")
      */
-    public function addQuestion(Request $request,EntityManagerInterface $manager)
+    public function addQuizzQuestion(Request $request,EntityManagerInterface $manager)
     {
-    
         $quizz = new Quizz();
         $form=$this->createForm(CreateQuestionType::class,$quizz);
         $form->handleRequest($request);
@@ -31,7 +30,7 @@ class QuestionController extends AbstractController
             $this->manager->flush();
 
         }
-        return $this->render('formQuizz.html.twig' ,[
+        return $this->render('form/formQuizz.html.twig' ,[
              'form' => $form->createView()
              ]);
     }
