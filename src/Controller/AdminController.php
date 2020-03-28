@@ -12,7 +12,9 @@ use App\Entity\Quizz;
 
 
 
-
+/**
+ * @Route("/admin",name="")
+ */
 class AdminController extends AbstractController
 {
     /**
@@ -23,6 +25,7 @@ class AdminController extends AbstractController
         $quizz = new Quizz();
         $form=$this->createForm(CreateQuestionType::class,$quizz);
         $form->handleRequest($request);
+        
         if($form->isSubmitted()&&$form->isValid()){
     
             $this->manager=$manager;
@@ -30,7 +33,7 @@ class AdminController extends AbstractController
             $this->manager->flush();
 
         }
-        return $this->render('form/formQuizz.html.twig' ,[
+        return $this->render('admin/quizzQuestion.html.twig' ,[
              'form' => $form->createView()
              ]);
     }

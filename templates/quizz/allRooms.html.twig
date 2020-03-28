@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="container">
+    <table class="table table-stripped">
+        <thead>
+            <tr>
+                <td>Nom</td>
+                <td>Difficulter</td>
+                <td>Connecter</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for game in games %}
+            <tr>
+                <td>{{game.nameGame}}
+
+                {% if game.level == 0 %}
+                    <td>facile</td>
+                {% elseif game.level == 1 %}
+                    <td>moyen</td>
+                {% else %}
+                    <td>difficile</td>
+                {% endif %}
+
+                {% if game.playerTwo %}
+                    <td>2/2</td>
+                    <td></td>
+                {% else %}
+                    <td>1/2</td>
+                    <td>
+                        <button class="btn btn-primary">Join</button>
+                    </td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

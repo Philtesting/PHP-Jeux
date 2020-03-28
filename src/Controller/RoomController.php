@@ -2,19 +2,43 @@
 
 namespace App\Controller;
 
+use App\Entity\Game;
+use App\Form\GameCreationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Users;
-use App\Entity\Game;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\GameRepository;
 use App\Repository\UsersRepository;
 
 
-class SalonController extends AbstractController
+class RoomController extends AbstractController
 {
+    /**
+     * @Route("/room/quizz/index", name="quizz.index")
+     */
+    public function index(GameRepository $gameBD){
+        $games = $gameBD->findBy(
+            array(),
+            array('id' => 'DESC')
+        );
+        return $this->render('quizz/allRooms.html.twig', [
+            'games' => $games,
+        ]);
+    }
 
+    /**
+     * @Route("/room/quizz/create",name="quizz.create")
+     */
+    public function roomCreate(Request $request){
+
+        $task = new Game;
+        $form = $this->createForm(GameCreationType::class, $task);
+        dump($form);
+
+        return $this->render('quizz/createGame.html.twig',[
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @Route("/Acceuil/salon",name="salon")
@@ -35,41 +59,23 @@ class SalonController extends AbstractController
         );
         
         $idP1 = $P2->getPlayerOne();
-
         $idP2 = $P2->getPlayerTwo();
 
          if ($idP2 == NULL ) {
-
             $nameP2 = 'Il manque un joueur' ;
-         }else {
-
+         }
+         else {
             $user2 = $userBD->find($idP2);
-
             $nameP2 = $user2->getUsername();
-
-            dump($nameP2);
          }
 
         $user1 = $userBD->find($idP1);
-
         $name = $user1->getUsername();
 
-
-
-         dump($name);
-         dump($nameP2);
-
-
-
-        return $this->render('quizz/salon.html.twig',[
+        return $this->render('quizz/room.html.twig',[
             'player' => $name , 'player2' => $nameP2 ,
             'login' => $logUsername
         ]);
-
-
-        
-
-
     }
 
     
