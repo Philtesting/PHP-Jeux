@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#scoreF" role="tab" aria-selected="true" aria-controls="scoreF">Quizz Facile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#scoreM" role="tab" aria-selected="false" aria-controls="scoreM">Quizz Moyen</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#scoreD" role="tab" aria-selected="false" aria-controls="scoreD">Quizz Difficile</a>
+            </li>
+        </ul>
+
+        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="scoreF"  aria-labelledby="scoreF">
+                <table class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <td>Classement</td>
+                            <td>Nom</td>
+                            <td>Score</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for score in scoreF %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{score.username}}</td>
+                            <td>{{score.scoreFacil}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="scoreM"  aria-labelledby="scoreM">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Classement</td>
+                            <td>Nom</td>
+                            <td>Score</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for score in scoreM %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{score.username}}</td>
+                            <td>{{score.scoreMoyen}}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="scoreD"  aria-labelledby="scoreD">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Classement</td>
+                            <td>Nom</td>
+                            <td>Score</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for score in scoreD %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{score.username}}</td>
+                            <td>{{score.scoreDifficil}}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

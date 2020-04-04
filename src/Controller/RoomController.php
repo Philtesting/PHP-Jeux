@@ -77,19 +77,6 @@ class RoomController extends AbstractController
             'login' => $logUsername
         ]);
     }
-
-    
-    /**
-     * @Route("/Acceuil/play",name="play")
-     */
-    public function play()
-    {
-        
-
-
-
-    }
-
     
 
 }

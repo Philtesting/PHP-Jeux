@@ -31,7 +31,7 @@ class AdminController extends AbstractController
             $this->manager->flush();
 
         }
-        return $this->render('admin/quizzQuestion.html.twig' ,[
+        return $this->render('admin/quizzQuestions.html.twig' ,[
              'form' => $form->createView()
              ]);
     }
