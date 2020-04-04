@@ -12,13 +12,11 @@ use App\Entity\Quizz;
 
 
 
-/**
- * @Route("/admin",name="")
- */
+
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/createQ",name="add_question")
+     * @Route("/admin/createQ",name="add_question")
      */
     public function addQuizzQuestion(Request $request,EntityManagerInterface $manager)
     {
