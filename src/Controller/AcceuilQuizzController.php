@@ -75,7 +75,7 @@ class AcceuilQuizzController extends AbstractController
         $P2->setPlayerTwo($user);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('salon'));
+        return $this->redirect($this->generateUrl('room.quizz.salon'));
 
     }
 }

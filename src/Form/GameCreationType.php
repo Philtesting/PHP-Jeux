@@ -15,13 +15,12 @@ class GameCreationType extends AbstractType
     {
         $builder
             ->add('nameGame')
-            ->add('difficulter', ChoiceType::class, [
+            ->add('level', ChoiceType::class, [
                 'choices'  => [
                     'Facile' => 0,
                     'Moyen' => 1,
                     'Difficile' => 2,
-                ],
-                'mapped' => false
+                ]
             ])
             ->add('save', SubmitType::class,[
                 'attr' => [

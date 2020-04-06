@@ -11,10 +11,14 @@ use App\Repository\GameRepository;
 use App\Repository\UsersRepository;
 
 
+/**
+ * @Route("/room", name="room.")
+ */
+
 class RoomController extends AbstractController
 {
     /**
-     * @Route("/room/quizz/index", name="quizz.index")
+     * @Route("/quizz/index", name="quizz.index")
      */
     public function index(GameRepository $gameBD){
         $games = $gameBD->findBy(
@@ -27,13 +31,24 @@ class RoomController extends AbstractController
     }
 
     /**
-     * @Route("/room/quizz/create",name="quizz.create")
+     * @Route("/quizz/create",name="quizz.create")
      */
     public function roomCreate(Request $request){
 
-        $task = new Game;
-        $form = $this->createForm(GameCreationType::class, $task);
-        dump($form);
+        $game = new Game();
+        $form = $this->createForm(GameCreationType::class, $game);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $user = $this->getUser();
+            $game->setPlayerOne($user);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($game);
+            $em->flush();
+            
+            return $this->redirect($this->generateUrl('join'));
+        }
 
         return $this->render('quizz/createGame.html.twig',[
             'form' => $form->createView(),
@@ -41,7 +56,7 @@ class RoomController extends AbstractController
     }
 
     /**
-     * @Route("/Acceuil/salon",name="salon")
+     * @Route("/quizz/salon",name="quizz.salon")
      */
     public function dataNomSalon(UsersRepository $userBD , GameRepository $gameBD)
     {
@@ -77,6 +92,5 @@ class RoomController extends AbstractController
             'login' => $logUsername
         ]);
     }
-    
 
 }
