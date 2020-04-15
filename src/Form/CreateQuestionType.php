@@ -20,7 +20,7 @@ class CreateQuestionType extends AbstractType
                     ->add('reponse1')
                     ->add('reponse2')
                     ->add('reponse3')
-                    ->add('niveau', ChoiceType::class, [
+                    ->add('difficulter', ChoiceType::class, [
                         'choices'  => [
                             'Facile' => 0,
                             'Moyen' => 1,

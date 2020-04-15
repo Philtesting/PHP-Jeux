@@ -28,6 +28,8 @@ class SecurityController extends AbstractController
         $user -> setScoreFacil(0);
         $user -> setScoreMoyen(0);
         $user -> setScoreDifficil(0);
+        $user -> setExp(0);
+        
         $user->setLevel(0);
         
         if($form->isSubmitted()&&$form->isValid()){

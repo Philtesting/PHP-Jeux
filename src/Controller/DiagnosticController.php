@@ -9,30 +9,103 @@ class DiagnosticController  extends AbstractController
     /**
      * @Route("/diagnostic",name="diagnostic")
      */
-    public function home()
+    public function firstImage()
         {
-            $curl = curl_init('https://sandbox-healthservice.priaid.ch/diagnosis?symptoms=[9,10,12]&gender=female&year_of_birth=1994&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRpZXluYmFseTk0QGdtYWlsLmNvbSIsInJvbGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc2lkIjoiNjY3MCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvdmVyc2lvbiI6IjIwMCIsImh0dHA6Ly9leGFtcGxlLm9yZy9jbGFpbXMvbGltaXQiOiI5OTk5OTk5OTkiLCJodHRwOi8vZXhhbXBsZS5vcmcvY2xhaW1zL21lbWJlcnNoaXAiOiJQcmVtaXVtIiwiaHR0cDovL2V4YW1wbGUub3JnL2NsYWltcy9sYW5ndWFnZSI6ImVuLWdiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9leHBpcmF0aW9uIjoiMjA5OS0xMi0zMSIsImh0dHA6Ly9leGFtcGxlLm9yZy9jbGFpbXMvbWVtYmVyc2hpcHN0YXJ0IjoiMjAyMC0wMy0yMSIsImlzcyI6Imh0dHBzOi8vc2FuZGJveC1hdXRoc2VydmljZS5wcmlhaWQuY2giLCJhdWQiOiJodHRwczovL2hlYWx0aHNlcnZpY2UucHJpYWlkLmNoIiwiZXhwIjoxNTg0OTYxMjc4LCJuYmYiOjE1ODQ5NTQwNzh9.xYFz_meBT9N0omJ3uMKmUdF9Ej5T5bwCM5saOBDu6wQ&format=json&language=en-gb');
-           /* $params = [
+            $api_key = "philippefidalgo@gmail.com";
+            $secret_key = "q2RKr48PdHs6n9DBk";
+            $requested_uri ="https://sandbox-authservice.priaid.ch/login";
+            $hashed_credentials = base64_encode(hash_hmac ( 'md5' , $requested_uri , $secret_key, true ));
+            $authorization = 'Authorization: Bearer '.$api_key.':'.$hashed_credentials;
 
-                'symptome' => 'maux de téte',
-                'genre'   => 'feminin',
-                'date de naissance' => '07/06/96'
+            $ch = curl_init();
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, '');
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
+			curl_setopt($ch, CURLOPT_URL, $requested_uri );
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-            ];
-            $params_string = http_build_query($params);*/
-
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,false);
-            curl_setopt ($curl, CURLOPT_RETURNTRANSFER,true);
-           
-            $data = curl_exec($curl);
-            dump($data);
-    
-            return $this->render('diagnostic.html.twig',[
-                'data' => $data
-                
-            ]);
+			$result = curl_exec($ch);
+            $obj = json_decode($result);
             
+            $curl = curl_init();
+
+            $auth= $obj->{'Token'};
+        
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://sandbox-healthservice.priaid.ch/symptoms?token=".$auth."&format=json&language=fr-fr",
+                CURLOPT_RETURNTRANSFER => true,
+            ));
+            
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
             curl_close($curl);
+
+            $data = json_decode($response);
+
+            return $this->render('diagnostic/index.html.twig',[
+                'data' => $data
+            ]); 
             
+        }
+
+    /**
+     * @Route("/diagnostic/id={id}/", name="diagnostic.2")
+     */
+    public function secondImage($id)
+        {
+            return $this->render('diagnostic/second.html.twig',[
+                'id' => $id,
+            ]); 
+            
+        }
+    /**
+     * @Route("/diagnostic/id={id}/sexe={sexe}/", name="diagnostic.3")
+     */
+    public function thirdImage($id, $sexe)
+        {
+            return $this->render('diagnostic/third.html.twig',[
+                'id' => $id,
+                'sexe' => $sexe
+            ]); 
+            
+        }
+    /**
+     * @Route("/diagnostic/id={id}/sexe={sexe}/age={age}/",name="diagnostic.end")
+     */
+    public function results($id, $sexe, $age)
+        {
+            $curl = curl_init();
+            if($sexe = "M"){
+                $sexe = "male";
+            }
+            else{
+                $sexe = "female";
+            }
+            $auth="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBoaWxpcHBlZmlkYWxnb0BnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjY2NzEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ZlcnNpb24iOiIyMDAiLCJodHRwOi8vZXhhbXBsZS5vcmcvY2xhaW1zL2xpbWl0IjoiOTk5OTk5OTk5IiwiaHR0cDovL2V4YW1wbGUub3JnL2NsYWltcy9tZW1iZXJzaGlwIjoiUHJlbWl1bSIsImh0dHA6Ly9leGFtcGxlLm9yZy9jbGFpbXMvbGFuZ3VhZ2UiOiJlbi1nYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvZXhwaXJhdGlvbiI6IjIwOTktMTItMzEiLCJodHRwOi8vZXhhbXBsZS5vcmcvY2xhaW1zL21lbWJlcnNoaXBzdGFydCI6IjIwMjAtMDMtMjEiLCJpc3MiOiJodHRwczovL3NhbmRib3gtYXV0aHNlcnZpY2UucHJpYWlkLmNoIiwiYXVkIjoiaHR0cHM6Ly9oZWFsdGhzZXJ2aWNlLnByaWFpZC5jaCIsImV4cCI6MTU4Njk4MjY3MywibmJmIjoxNTg2OTc1NDczfQ.9f4xVPlsCDqw7Cqzs8AfkJVfysSEadOouLktsnEPsIo";
+            
+            
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://sandbox-healthservice.priaid.ch/diagnosis?symptoms='.$id.'&gender='.$sexe.'&year_of_birth='.$age.'&token='.$auth.'&format=json&language=fr-fr',
+                CURLOPT_RETURNTRANSFER => true,
+            ));
+            
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            $data = json_decode($response);
+
+            if ($err) {
+                echo "cURL Error #:" . $err;
+                dump($err);
+            }
+            else {
+                dump($data);
+            }
+
+            return $this->render('diagnostic/final.html.twig',[
+                'data' => $data,
+            ]); 
         }
 }

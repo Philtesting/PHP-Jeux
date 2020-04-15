@@ -1,7 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <div class="container">
-    <table class="table table-striped">
+<br>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <td>Nom</td>
@@ -11,28 +17,37 @@
         </thead>
         <tbody>
         {% for game in games %}
-            <tr>
-                <td>{{game.nameGame}}
+                <tr>
+                    <td>{{game.nomJeux}}
 
-                {% if game.level == 0 %}
-                    <td>facile</td>
-                {% elseif game.level == 1 %}
-                    <td>moyen</td>
-                {% else %}
-                    <td>difficile</td>
-                {% endif %}
+                    {% if game.difficulter == 0 %}
+                        <td>facile</td>
+                    {% elseif game.difficulter == 1 %}
+                        <td>moyen</td>
+                    {% else %}
+                        <td>difficile</td>
+                    {% endif %}
 
-                {% if game.playerTwo %}
-                    <td>2/2</td>
-                    <td></td>
-                {% else %}
-                    <td>1/2</td>
-                    <td>
-                        <button class="btn btn-primary">Join</button>
-                    </td>
-                {% endif %}
-            </tr>
+                    {% if game.playerTwo %}
+                        <td>2/2</td>
+                        <td></td>
+                    {% else %}
+                        <td>1/2</td>
+                        <td>
+                            <button class="btn btn-primary">
+                                <a href={{ path( 'room.quizz.join' , {id: game.id }) }} >Join</a>
+                            </button>
+                        </td>
+                    {% endif %}
+                </tr>
         {% endfor %}
+        {% if games is empty %}
+            <tr>
+                <td rowspan="3" colspan="3">Aucun jeux disponible en ce moment</td>
+            </tr>
+
+        {% endif %}
+
         </tbody>
     </table>
 </div>

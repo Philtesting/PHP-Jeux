@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+  {{ encore_entry_link_tags('app') }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+#div1 {
+  font-size:48px;
+}
+</style>
+{% endblock %}
+
+{% block body %} 
+
+<div class="undernav" style="background: url(/quizz/quizz.png) no-repeat center;" >
+    <button  id="next-Q" style="pointer-events:none">Question Suivante...
+        <div id="div1" class="fa"></div>
+    </button>
+</div>
+<script>
+
+window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+});
+   
+</script>
+
+{% endblock %} 

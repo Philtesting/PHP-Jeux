@@ -19,6 +19,13 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+    public function playerNull(){
+        $qb = $this->createQueryBuilder('g')
+                ->where('g.playerTwo is null');
+
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Game[] Returns an array of Game objects
     //  */

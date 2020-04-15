@@ -44,7 +44,7 @@ class Quizz
     /**
      * @ORM\Column(type="integer")
      */
-    private $niveau;
+    private $difficulter;
 
     public function getId(): ?int
     {
@@ -111,14 +111,14 @@ class Quizz
         return $this;
     }
 
-    public function getNiveau(): ?int
+    public function getDifficulter(): ?int
     {
-        return $this->niveau;
+        return $this->difficulter;
     }
 
-    public function setNiveau(int $niveau): self
+    public function setDifficulter(int $difficulter): self
     {
-        $this->niveau = $niveau;
+        $this->difficulter = $difficulter;
 
         return $this;
     }

@@ -14,8 +14,8 @@ class GameCreationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nameGame')
-            ->add('level', ChoiceType::class, [
+            ->add('nomJeux')
+            ->add('difficulter', ChoiceType::class, [
                 'choices'  => [
                     'Facile' => 0,
                     'Moyen' => 1,

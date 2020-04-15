@@ -4,19 +4,60 @@
 {% endblock %}
 
 {% block stylesheets %}
-    {{ encore_entry_link_tags('app') }}
+  {{ encore_entry_link_tags('app') }}
+  <style>
+  .question{
+    font-size: 1.5rem;
+    color:black;
+  }
+
+  .questionN{
+    font-size: 1rem;
+    color:rgb(0, 68, 102);
+  }
+</style>
 {% endblock %}
+
 {% block header %}{% endblock %}
 {% block body %}
-
-<div class="undernav">
-  <div class="container">
+<div class="undernav noselect" style="background: url(/quizz/quizz.png) no-repeat center;">
+  <div id="demo" class="demo">
+    <div class="demo__colored-blocks">
+      <div class="demo__colored-blocks-rotater">
+        <div class="demo__colored-block"></div>
+        <div class="demo__colored-block"></div>
+        <div class="demo__colored-block"></div>
+      </div>
+      <div class="demo__colored-blocks-inner"></div>
+      <div id="start" class="demo__text">Prêt?</div>
+    </div>
+    <div class="demo__inner">
+      <svg class="demo__numbers" viewBox="0 0 100 100">
+        <defs>
+          <path class="demo__num-path-1" d="M40,28 55,22 55,78"/>
+          <path class="demo__num-join-1-2" d="M55,78 55,83 a17,17 0 1,0 34,0 a20,10 0 0,0 -20,-10"/>
+          <path class="demo__num-path-2" d="M69,73 l-35,0 l30,-30 a16,16 0 0,0 -22.6,-22.6 l-7,7"/>
+          <path class="demo__num-join-2-3" d="M28,69 Q25,44 34.4,27.4"/>
+          <path class="demo__num-path-3" d="M30,20 60,20 40,50 a18,15 0 1,1 -12,19"/>
+        </defs>
+        <path class="demo__numbers-path" 
+              d="M-10,20 60,20 40,50 a18,15 0 1,1 -12,19 
+                Q25,44 34.4,27.4
+                l7,-7 a16,16 0 0,1 22.6,22.6 l-30,30 l35,0 L69,73 
+                a20,10 0 0,1 20,10 a17,17 0 0,1 -34,0 L55,83 
+                l0,-61 L40,28" />
+      </svg>
+    </div>
+  </div>
+  <div id="container" class="container hide">
       <div id="question-container" class="hide" >
-        <div >
-          <div style="display:inline" id="question">question</div>
-          <div id="sec" class="timer" >10</div>
+        <div class="questionN" style="display:inline" id="questionN"></div>
+        <br>
+        <div class="row">
+          <div class="col-10 question" style="display:inline" id="question">question</div>
+          <div class="col-2" id="app"></div>
         </div>
-        
+
         <div id="answer-buttons" class="btn-grid">
           <button class="btn-quizz">reponse1</button>
           <button class="btn-quizz">reponse2</button>
@@ -24,11 +65,18 @@
           <button class="btn-quizz">reponse4</button>
         </div>
       </div>
-      <div class="controls">
-        <button id="start-btn" class="start-btn btn-quizz">Start</button>
-        <button id="next-btn" class="next-btn btn-quizz hide">Next</button>
-        <a href="{{ path('home')}}" id="back-btn" class="next-btn btn-quizz hide">Back</a>
-        <a href="{{ path('game.highscore')}}" id="score-btn" class="next-btn btn-quizz hide">Save Score</a>
+
+      <div id="score-container">
+        <div class="row">
+          <div class="col-lg-8 col-md-8 col-sm-6" style="display:inline">
+              <div class="hide questionN" id="scoreTotal"></div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-6">
+            <button  id="next-Q" class=" invisible" style="pointer-events:none">Question Suivante
+                <div id="div1" class="fa"></div>
+            </button>
+          </div>
+        </div>
       </div>
   </div>
 </div>
@@ -38,29 +86,95 @@
 
 <script>
 
-  var startButton = document.getElementById('start-btn');
-  var nextButton = document.getElementById('next-btn');
+  var start = document.getElementById('start');
+  var nextQ = document.getElementById('next-Q');
   var questionContainerElement = document.getElementById('question-container');
   var questionElement = document.getElementById('question');
-  var sec = document.getElementById('sec');
   var answerButtonsElement = document.getElementById('answer-buttons');
-  var container = document.getElementById('whiteContainer');
-  var back = document.getElementById('back-btn');
-  var score = document.getElementById('score-btn');
-  var seconds;
-  var countdown;
+  var container = document.getElementById('container');
+  var scoreTotal = document.getElementById('scoreTotal');
+  var seconds =15 
+  var time;
+  var countdown, intervalID;
+  var milsec = 1;
   var scoreCurr = 0;
+  var questionNum;
   var firstQ = true;
   var shuffledQuestions, currentQuestionIndex;
+  var count = 0;
+  const FULL_DASH_ARRAY = 283;
+  const WARNING_THRESHOLD = 10;
+  const ALERT_THRESHOLD = 5;
 
-  startButton.addEventListener('click', startGame);
-  nextButton.addEventListener('click', function () {
-    currentQuestionIndex++;
-    setNextQuestion();
-  });
+  const COLOR_CODES = {
+  info: {
+    color: "green"
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD
+  }
+  };
+
+  const TIME_LIMIT = 15;
+  var remainingPathColor = COLOR_CODES.info.color;
+
+  start.addEventListener("animationend", myEndFunction);
+
+  document.getElementById("app").innerHTML = `
+                  <div class="base-timer">
+                  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                      <g class="base-timer__circle">
+                      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+                      <path
+                          id="base-timer-path-remaining"
+                          stroke-dasharray="283"
+                          class="base-timer__path-remaining ${remainingPathColor}"
+                          d="
+                          M 50, 50
+                          m -45, 0
+                          a 45,45 0 1,0 90,0
+                          a 45,45 0 1,0 -90,0
+                          "
+                      ></path>
+                      </g>
+                  </svg>
+                  <span id="base-timer-label" class="base-timer__label">${seconds}</span>
+                  </div>
+                  `;
+
+{# document.addEventListener('visibilitychange', leavePage);
+
+function leavePage(){
+    if(document.hidden) {
+      window.location.replace(window.location.protocol+"//"+window.location.host+"{{ path( 'game.quizz.send.score', {id: game.id, tab: 'tab'} ) }}");
+    }
+} #}
+
+  function updateTransition() {
+    var el = document.querySelector("button.next-question");
+    count+=1
+    if (el && count==1) {
+      el.classList.remove('next-question')
+      el.classList.add('next-question1')
+    }
+    if(count == 20){
+      count =0
+    }
+    return el;
+  }
+
+  function myEndFunction() {
+    demo.classList.add('hide')
+    container.classList.remove('hide')
+    startGame()
+  }
 
   function startGame() {
-    startButton.classList.add('hide');
     shuffledQuestions = questions.sort(function () {
       return Math.random() - .5;
     });
@@ -72,58 +186,112 @@
   function setNextQuestion() {
     resetState();
     showQuestion(shuffledQuestions[currentQuestionIndex]);
-
-    if (!firstQ) {
-      stopTimer();
-    }
-
+    resetRemainingPathColor()
     restartTimer();
   }
 
   function restartTimer() {
-    seconds = 10;
-    document.getElementById("sec").textContent = seconds;
-    seconds -= 0.5;
-    countdown = setInterval(function () {
-      document.getElementById("sec").textContent = Math.ceil(seconds);
-      seconds -= 0.1;
+    time = 21 
+    seconds = time - 5
 
-      if (seconds < -0.2) {
-        timeout();
-        var pasleTime = document.createElement('div');
-        pasleTime.innerText = "Temps écoulé";
-        answerButtonsElement.appendChild(pasleTime);
-        addScore(false);
-        stopTimer();
-      }
-    }, 100);
-    firstQ = false;
+    countdown = setInterval(function () {
+                seconds -= milsec;
+                time -= 1;
+
+                document.getElementById("base-timer-label").innerHTML=Math.ceil(seconds)
+                setCircleDasharray();
+                setRemainingPathColor(Math.ceil(seconds));
+                
+                if (seconds < 1) {
+                  milsec = 0
+                  timeout();
+                  var pasleTime = document.createElement('div');
+                  pasleTime.innerText = "⏰ Temps écoulé ⏰";
+                  pasleTime.setAttribute('class','question')
+                  answerButtonsElement.appendChild(pasleTime);
+                  addScore(false);
+
+                  if(currentQuestionIndex == 9){
+                    window.location.replace(window.location.protocol+"//"+window.location.host+"{{ path( 'game.quizz.send.score', {id: game.id}) }}");
+                  }
+                  else{
+                    nextQ.classList.remove('invisible')
+                  }
+                }
+
+                if(time < 1){
+                  stopTimer();
+                  milsec = 1
+                  currentQuestionIndex++;
+                  setNextQuestion();
+                }
+
+    }, 1000);
+    intervalID = window.setInterval(updateTransition, 1000);
+  }
+
+  function setRemainingPathColor(timeLeft) {
+    const { alert, warning, info } = COLOR_CODES;
+    if (timeLeft <= alert.threshold) {
+      document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(warning.color);
+      document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(alert.color);
+    } else if (timeLeft <= warning.threshold) {
+      document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(info.color);
+      document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(warning.color);
+    }
+  }
+
+  function resetRemainingPathColor() {
+        document.getElementById("base-timer-path-remaining").setAttribute("class", "")
+        remainingPathColor = COLOR_CODES.info.color;
+        document.getElementById("base-timer-path-remaining").classList.add('base-timer__path-remaining')
+        document.getElementById("base-timer-path-remaining").classList.add(remainingPathColor)
+  }
+  
+  function calculateTimeFraction() {
+    const rawTimeFraction = Math.ceil(seconds) / TIME_LIMIT;
+    return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+  }
+
+  function setCircleDasharray() {
+    const circleDasharray = `${(
+        calculateTimeFraction() * FULL_DASH_ARRAY).toFixed(0)
+        } 283`;
+    document
+        .getElementById("base-timer-path-remaining")
+        .setAttribute("stroke-dasharray", circleDasharray);
   }
 
   function addScore(correct) {
+    var scoreNow = seconds
     if(typeof correct == 'undefined' || !correct){
-        seconds = 0;
+        scoreNow = 0;
     }
 
-    var score = document.createElement('div');
-    score.innerText = "Vous avez gagné " + Math.round(seconds * 100) + " points";
-    answerButtonsElement.appendChild(score);
-
-    var scoreTotal = document.createElement('div');
-    scoreCurr += Math.round(seconds * 100);
-    scoreTotal.innerText = "Total: " + scoreCurr;
+    scoreTotal.classList.remove('hide')
+    scoreCurr += Math.round(scoreNow * 100);
+    scoreTotal.innerText = "Score: "+ Math.round(scoreNow * 100) +"\n"+"Total: " + scoreCurr;
 
     setCookie("highscore", scoreCurr)
-    setCookie("difficulter", {{difficulter}})
-    answerButtonsElement.appendChild(scoreTotal);
   }
 
   function stopTimer() {
     clearInterval(countdown);
+    clearInterval(intervalID);
   }
 
   function showQuestion(question) {
     answerButtonsElement.setAttribute('style','')
+    questionNum = currentQuestionIndex + 1;
+    document.getElementById('questionN').innerText = "Question "+questionNum+" sur 10:"
     questionElement.innerText = question.question
 
     var answersA = {text: question.bonneReponse, correct: true };
@@ -168,8 +336,6 @@
 
   function timeout() {
     clearStatusClass(document.body);
-    nextButton.classList.remove('hide');
-
     while (answerButtonsElement.firstChild) {
       answerButtonsElement.removeChild(answerButtonsElement.firstChild);
     }
@@ -177,17 +343,21 @@
 
   function resetState() {
     clearStatusClass(document.body);
-    nextButton.classList.add('hide');
-
     while (answerButtonsElement.firstChild) {
       answerButtonsElement.removeChild(answerButtonsElement.firstChild);
     }
+    
+    scoreTotal.classList.add('hide')
+    nextQ.classList.add('invisible')
+    nextQ.classList.remove('next-question1')
+    nextQ.classList.add('next-question')
   }
 
   function selectAnswer(e) {
-    stopTimer();
+    milsec = 0;
     answerButtonsElement.setAttribute('style','pointer-events:none')
     var selectedButton = e.target;
+    selectedButton.style.borderColor = '#000';
     var correct = selectedButton.dataset.correct;
     addScore(correct)
     setStatusClass(document.body, correct);
@@ -196,10 +366,9 @@
     });
 
     if (shuffledQuestions.length > currentQuestionIndex + 1) {
-      nextButton.classList.remove('hide');
+      nextQ.classList.remove('invisible')
     } else {
-      back.classList.remove('hide');
-      score.classList.remove('hide');
+      window.location.replace(window.location.protocol+"//"+window.location.host+"{{ path( 'game.quizz.send.score', {id: game.id} ) }}");
     }
   }
 
@@ -226,6 +395,20 @@
   }
   const questions = {{ quizz|json_encode|raw }}
 
+  function hourglass() {
+        var a;
+        a = document.getElementById("div1");
+        a.innerHTML = "&#xf251;";
+        setTimeout(function () {
+            a.innerHTML = "&#xf252;";
+            }, 1000);
+        setTimeout(function () {
+            a.innerHTML = "&#xf253;";
+            }, 2000);
+    }
+    hourglass();
+    setInterval(hourglass, 3000);
+
+
 </script>
-  
 {% endblock %}

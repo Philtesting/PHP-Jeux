@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+{% for message in app.flashes('warning') %}
+    <div class="alert alert-warning">
+        {{ message }}
+    </div>
+{% endfor %}
+<div class="card my-4">
+    <table class="table table-striped">
+      <thead>
+          <tr>
+              <td>Place</td>
+              <td>Nom</td>
+              <td>Score</td>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>🏆</td>
+              {% if win is null %}
+                <td>err</td>
+              {% else %}
+                <td>{{win.username}}</td>
+              {% endif %}
+
+              {% if scoreWin is null %}
+                <td>err</td>
+              {% else %}
+                <td>{{scoreWin}}</td>
+              {% endif %}
+          </tr>
+          <tr>
+              <td>😭</td>
+              {% if lose is null %}
+                <td>err</td>
+              {% else %}
+                <td>{{lose.username}}</td>
+              {% endif %}
+              {% if scoreLose is null %}
+                <td>err</td>
+              {% else %}
+                <td>{{scoreLose}}</td>
+              {% endif %}
+          </tr>
+      </tbody>
+    </table>
+    {% if user == win %}
+      <img SRC="{{ '/win/win1.gif'}}" class="py-5 mx-auto d-block img-fluid" style:"max-width: 100%;height: auto;"  alt="Gagner">
+    {% else %}
+    <img src="/lose/lose1.gif" class="py-5 mx-auto d-block img-fluid" style:"max-width: 100%;height: auto;" alt="Perdue">
+    {% endif %}
+</div>
+
+
+{% endblock %}

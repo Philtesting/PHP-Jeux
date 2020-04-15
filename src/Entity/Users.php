@@ -69,6 +69,11 @@ class Users implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="playerTwo")
      */
     private $games;
+
+    /** 
+     * @ORM\Column(type="integer")
+     */
+    private $Exp;
     
     public function __construct()
     {
@@ -203,5 +208,17 @@ class Users implements UserInterface
     public function setLevel($level): void
     {
         $this->level = $level;
+    }
+
+    public function getExp(): ?int
+    {
+        return $this->Exp;
+    }
+
+    public function setExp(int $Exp): self
+    {
+        $this->Exp = $Exp;
+
+        return $this;
     }
 }

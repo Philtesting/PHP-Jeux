@@ -6,44 +6,139 @@
     {% endblock %}
 {% block body %}
 <div class="undernav">
-  <div class="container">
-
-      <div class="m-3" class="controls" >
-        <h1> Bienvenue {{login}}</h1> <br>
-
-        <h2>Participants</h2>
-        <hr>
-        <table class="table table-stripped">
-            <thead>
-                <tr>
-                    <td>Joueurs :</td>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{player}}</td>
-                </tr>
-            </tbody>
-            {% if player2 is not null %}
-            <tbody>
-                <tr>
-                    <td>{{player2}}</td>
-
-                </tr>
-            </tbody>
-            {% endif %}
+    <div class="container">
+        <div class="m-3" class="controls" >
+            <h1>Salle {{game.nomJeux}}</h1>
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Joueurs</td>
+                        <td>Prêts</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id = "P1">{{game.playerOne.username}}</td>
+                        {% if game.statusP1 is not null and game.statusP2 != 1 %}    
+                            <td>✅</td>
+                        {% else %}
+                            <td id = "statusP1">❌</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                {% if game.playerTwo is not null %}
+                        <td id = "P2">{{game.playerTwo.username}}</td>
+                        {% if game.statusP2 is not null and game.statusP2 != 1 %}
+                            <td>✅</td>
+                        {% else %}
+                            <td id = "statusP2">❌</td>
+                        {% endif %}
+                {% else %}
+                        <td id = "P2">En attente...</td>
+                        <td id = "statusP2">❌</td>
+                {% endif %}
+                    </tr>
+                </tbody>
             </table>
-    {% if player2 != "Il manque un joueur" %}
-            <a href={{ path( 'game.quizz' , {difficulter: 0}) }}  type = "submit" class="next-btn btn-quizz">Play</a>
-    {% endif %}
-      </div>
-
-  </div>
+            <div class="row">
+                <div class="col-7">
+                    {% if game.playerTwo is not null %}
+                        <button id="ready" class=" ready">
+                            Ready
+                        </button>
+                    {% else %}
+                        <button id="ready" class="hide ready">
+                            Ready
+                        </button>
+                    {% endif %}
+                </div>
+                <div class="col-5">
+                    <button id="starting" class="hide col starting">
+                        Starting... 
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-        {% block javascripts %}
-        
-            {{ encore_entry_script_tags('app') }}
+{% endblock %}
+{% block javascripts %} 
+   <script language = "javascript" 
+      src = "https://code.jquery.com/jquery-2.2.4.min.js"></script> 
+   
+   <script language = "javascript">
+    var sendAjax;
+    $(document).ready(function(){   
+        sendAjax = setInterval(function () {
+            $.ajax({  
+                url:        "/room/quizz/salon/{{id}}",  
+                type:       'POST',   
+                dataType:   'json',  
+                async:      true,  
+                
+                success: function(data, status) {  
+                        student = data[0]; 
+                        console.log(student)
+                        $('#P1').html(student['P1']);
+                        if(student['P2'] == null){
+                            $('#P2').html("En attente ...");
+                        }
+                        else{
+                             document.getElementById('ready').classList.remove('hide')
+                            $('#P2').html(student['P2']);
+                        }  
+                        if(student['statusP1'] == null){
+                            $('#statusP1').html("❌");
+                        }
+                        else {
+                            $('#statusP1').html("✅");
 
-        {% endblock %}
+                        }
+                        if(student['statusP2'] == null){
+                            $('#statusP2').html("❌");
+                        }
+                        else {
+                            $('#statusP2').html("✅");
+                        }
+                        if(student['P1'] != null && student['P2'] != null && student['statusP1'] != null && student['statusP2'] != null){
+                            document.getElementById('starting').classList.remove('hide')
+                            var count = 0;
+                            var time
+                            var countdown = setInterval(function () {
+                                time = 5 - count
+                                $('#starting').html("Starting "+ time +" ...");
+                                count++;
+                                if(time == 0){
+                                    window.location.replace(window.location.protocol+"//"+window.location.host+"{{ path( 'game.quizz', {id: game.id}) }}");
+                                }
+                            }, 1000);
+                            clearInterval(sendAjax);
+                        }
+                },  
+                error : function(xhr, textStatus, errorThrown) {  
+                    alert('Ajax request failed.');  
+                }  
+            })
+        }, 1000); 
+    });
+    $(document).ready(function(){   
+         $("#ready").on("click", function(event){  
+            $.ajax({  
+               url:        '/room/quizz/salon/{{id}}/0',  
+               type:       'POST',   
+               dataType:   'json',  
+               async:      true,  
+               
+               success: function(data, status) {  
+                   console.log("sucess")
+               },  
+               error : function(xhr, textStatus, errorThrown) {  
+                  alert('Ajax request failed.');  
+               }  
+            });  
+         });  
+      });  
+
+   </script> 
 {% endblock %}
