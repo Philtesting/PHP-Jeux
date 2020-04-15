@@ -14,13 +14,14 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+
 class SecurityController extends AbstractController
 {   private $entityManager;
 
     /**
      * @Route("/register",name="security_register")
      */
-   public function registration(Request $request,Encoder $encoder){
+   public function registration(Request $request,Encoder $encoder, \Swift_Mailer $mailer){
         $user=new Users();
         $form=$this->createForm(RegistrationType::class,$user);
         $form->handleRequest($request);
@@ -32,6 +33,15 @@ class SecurityController extends AbstractController
         
         if($form->isSubmitted()&&$form->isValid()){
            $encoder->encoder($user);
+            $mail = (new \Swift_Message('Bienvenue !'))
+                    ->setFrom('medic.games32@gmail.com')
+                    ->setTo($user->getEmail())
+                    ->setBody('Bienvenue dans Medi-Game')
+                    ;
+            $mailer->send($mail);
+
+            
+
            return $this->redirectToRoute('security_login');
         }
         return $this->render('security/registration.html.twig',['formRegister'=>$form->createView()]);
